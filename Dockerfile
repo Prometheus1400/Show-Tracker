@@ -14,6 +14,7 @@ RUN npm run build
 FROM golang:1.17-alpine as golangBuild
 WORKDIR /app
 COPY backend ./
+ENV GIN_MODE=release
 RUN go mod tidy && \
     go mod download && \
     go build -o main
