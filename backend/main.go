@@ -2,29 +2,26 @@ package main
 
 import (
 	// "net/http"
-	"fmt"
+	"log"
 	"github.com/gin-gonic/contrib/static"
 	"github.com/gin-gonic/gin"
+	"os"
+	// "path/filepath"
 )
 
 func main() {
-	fmt.Println("Show Tracker App v0.01")
+	log.Println("Show Tracker App v0.01")
+	var buildPath string
+	if _, prod := os.LookupEnv("PROD"); prod {
+		buildPath = "/app/build"
+	} else {
+		buildPath = "../frontend/build"
+	}
+	log.Println("buildpath:", buildPath)
 
 	router := gin.Default()
 
 	// Serve frontend static files
-	router.Use(static.Serve("/", static.LocalFile("../frontend/build", true)))
-
-	// Setup route group for the API
-	// api := router.Group("/api")
-	// {
-	// 	api.GET("/", func(c *gin.Context) {
-	// 		c.JSON(http.StatusOK, gin.H{
-	// 			"message": "pong",
-	// 		})
-	// 	})
-	// }
-
-	// Start and run the server
-	router.Run(":5000")
+	router.Use(static.Serve("/", static.LocalFile(buildPath, true)))
+	router.Run(":8080")
 }
