@@ -19,9 +19,14 @@ func main() {
 	}
 	log.Println("buildpath:", buildPath)
 
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+	}
+
 	router := gin.Default()
 
 	// Serve frontend static files
 	router.Use(static.Serve("/", static.LocalFile(buildPath, true)))
-	router.Run(":8080")
+	router.Run(":" + port)
 }
